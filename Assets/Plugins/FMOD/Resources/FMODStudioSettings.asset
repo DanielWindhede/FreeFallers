@@ -18,7 +18,7 @@ MonoBehaviour:
   sourceProjectPath: 
   sourceBankPath: Assets\Assets\Audio\Desktop
   SourceBankPathUnformatted: 
-  AutomaticEventLoading: 1
+  AutomaticEventLoading: 0
   BankLoadType: 0
   AutomaticSampleLoading: 0
   EncryptionKey: 
@@ -44,6 +44,8 @@ MonoBehaviour:
     Value: 0
   - Platform: 20
     Value: 0
+  - Platform: 3
+    Value: 1
   OverlaySettings:
   - Platform: 1
     Value: 1
