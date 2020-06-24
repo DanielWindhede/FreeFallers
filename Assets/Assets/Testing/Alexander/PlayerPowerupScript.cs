@@ -32,14 +32,11 @@ public class PlayerPowerupScript : MonoBehaviour
     void Start()
     {
         
-
     }
 
     void Update()
     {
-
-
-
+        //print(GetComponent<Rigidbody>().velocity.y);
     }
 
     private void UsePowerup()

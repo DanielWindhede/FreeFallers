@@ -16,9 +16,9 @@ public class PowerupScript : MonoBehaviour
     public PowerupType powerupType;
 
 
-    LayerMask _playerLayers;
     //använd global state sen
     [SerializeField] GameObject _player;
+    LayerMask _playerLayers;
 
     private void Awake()
     {
