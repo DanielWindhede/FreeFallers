@@ -9,7 +9,7 @@ public class PlayerPowerupScript : MonoBehaviour
     
     private PlayerInput _playerInput;
 
-    private Rigidbody _playerRB;
+    private Rigidbody2D _playerRB;
 
     [SerializeField]float _dashSpeed;
     [SerializeField] float _dashTime;
@@ -43,7 +43,7 @@ public class PlayerPowerupScript : MonoBehaviour
 
         _playerInput.PlayerControls.UsePowerup.performed += ctx => UsePowerup();
 
-        _playerRB = GetComponent<Rigidbody>();
+        _playerRB = GetComponent<Rigidbody2D>();
 
         powerupStateMachine = new StateMachine<PlayerPowerupScript>(this);
         defaultState = new DefaultState();
@@ -111,12 +111,12 @@ public class DefaultState : State<PlayerPowerupScript>
 
 public class DownDashState : State<PlayerPowerupScript>
 {
-    Rigidbody _playerRB;
+    Rigidbody2D _playerRB;
     float _dashSpeed;
     float _dashTime;
     Timer _timer;
 
-    public DownDashState(Rigidbody playerRB, float dashSpeed, float dashTime)
+    public DownDashState(Rigidbody2D playerRB, float dashSpeed, float dashTime)
     {
         _playerRB = playerRB;
         _dashSpeed = dashSpeed;
@@ -135,7 +135,7 @@ public class DownDashState : State<PlayerPowerupScript>
 
     public override void UpdateState(PlayerPowerupScript owner)
     {
-        _playerRB.velocity = new Vector3(_playerRB.velocity.x, -_dashSpeed, 0f);
+        _playerRB.velocity = new Vector2(_playerRB.velocity.x, -_dashSpeed);
         Debug.Log("GOOOO");
         if (_timer.Expired)
         {

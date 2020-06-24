@@ -31,7 +31,7 @@ public class DestructibleGroundScript : MonoBehaviour
         
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
         if (_playerLayers == (_playerLayers | 1 << collision.gameObject.layer))
         {
@@ -40,9 +40,8 @@ public class DestructibleGroundScript : MonoBehaviour
             
             if (Mathf.Abs(collision.relativeVelocity.y) > _velocityToBreak)
             {
-
-                //starta en coroutine som deletar bitarna efter x sec   
-                collision.gameObject.GetComponent<Rigidbody>().velocity = new Vector3(collision.gameObject.GetComponent<Rigidbody>().velocity.x, collision.relativeVelocity.y * _slowDownAmount, 0f);
+                //starta en coroutine som deletar bitarna efter x sec
+                collision.gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(collision.gameObject.GetComponent<Rigidbody2D>().velocity.x, collision.relativeVelocity.y * _slowDownAmount);
                 
                 Destroy(this.gameObject);
             }
