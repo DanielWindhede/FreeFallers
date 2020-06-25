@@ -56,7 +56,13 @@ public class Controller : MonoBehaviour
     
     public void Move(Vector2 amount)
     {
-        _velocity += amount;
+        _velocity += amount * Time.deltaTime;
+        float abs = Mathf.Abs(_velocity.x);
+        if (abs > _maxSpeed.x)
+            _velocity.x = Mathf.MoveTowards(_velocity.x, _maxSpeed.x * Mathf.Sign(_velocity.x), _stoppingSpeed * Time.deltaTime);
+        /*
+        else if (abs < _stoppingSpeed)
+            _velocity.x = Mathf.MoveTowards(_velocity.x, 0, _stoppingSpeed * Time.deltaTime);*/
     }
 
     public void InputMove(Vector2 inputDirection)
