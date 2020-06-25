@@ -7,9 +7,7 @@ public class PlayerPowerupScript : MonoBehaviour
 {
     public GlobalState.PowerupType currentPowerup;
     
-    private PlayerInput _playerInput;
-
-    //private Rigidbody2D _playerRB;
+    public PlayerInput playerInput;
 
     [SerializeField]float _dashSpeed;
     [SerializeField] float _dashTime;
@@ -17,31 +15,34 @@ public class PlayerPowerupScript : MonoBehaviour
     public StateMachine<PlayerPowerupScript> powerupStateMachine;
     
     public DefaultState defaultState = new DefaultState();
-    //public DownDashState downDashState = new DownDashState();
 
-    Player2D _player2D;
-    Controller2D _controller2D;
+    private Player2D _player2D;
+    private Controller2D _controller2D;
+
+    private GameHandler _gameHandler;
 
     private void OnEnable()
     {
-        if (_playerInput == null)
-            _playerInput = new PlayerInput();
-        _playerInput.PlayerControls.Enable();
+        if (playerInput == null)
+            playerInput = new PlayerInput();
+        playerInput.PlayerControls.Enable();
     }
 
     private void OnDisable()
     {
-        _playerInput.PlayerControls.Disable();
+        playerInput.PlayerControls.Disable();
     }
 
     private void Awake()
     {
         currentPowerup = GlobalState.PowerupType.None;
+        _gameHandler = GlobalState.state.GameHandler;
 
-        if (_playerInput == null)
-            _playerInput = new PlayerInput();
 
-        _playerInput.PlayerControls.UsePowerup.performed += ctx => UsePowerup();
+        if (playerInput == null)
+            playerInput = new PlayerInput();
+
+        playerInput.PlayerControls.UsePowerup.performed += ctx => UsePowerup();
 
         //_playerRB = GetComponent<Rigidbody2D>();
         _player2D = GetComponent<Player2D>();
@@ -52,14 +53,9 @@ public class PlayerPowerupScript : MonoBehaviour
 
         powerupStateMachine.ChangeState(defaultState);
     }
-    void Start()
-    {
-        
-    }
 
     void Update()
     {
-
         powerupStateMachine.Update();
     }
 
@@ -71,6 +67,7 @@ public class PlayerPowerupScript : MonoBehaviour
                 print("No power");
                 //Destroy(this.gameObject);
                 break;
+
             case 1:
                 if (!_controller2D.collisions.below)
                 {
@@ -78,14 +75,50 @@ public class PlayerPowerupScript : MonoBehaviour
                     currentPowerup = GlobalState.PowerupType.None;
                     powerupStateMachine.ChangeState(new DownDashState(_player2D, _dashSpeed, _dashTime));
                 }
-                //kolla att man är i luften 
                 break;
+
             case 2:
                 print("Used nr 2");
+                currentPowerup = GlobalState.PowerupType.None;
+                Time.timeScale = 0;
+
+                int teleportAmount = (int)Random.Range(4f, 8f);
+
+                print("time to swap " + teleportAmount + " times");
+
+                for (int i = 0; i < _gameHandler.playerList.Count; i++)
+                {
+                    _gameHandler.playerList[i].GetComponent<PlayerPowerupScript>().playerInput.PlayerControls.Disable();
+
+                    StartCoroutine(_gameHandler.playerList[i].GetComponent<PlayerPowerupScript>().ZumBookTeleportShit(_gameHandler.playerList[(i + 1) % _gameHandler.playerList.Count].transform.position, 0.5f, teleportAmount));
+                }
                 break;
         }
+    }
 
-        //flytta sen
+    public IEnumerator ZumBookTeleportShit(Vector3 newPos, float timeToWait, int teleportAmount)
+    {
+        if (teleportAmount > 0)
+        {
+            yield return new WaitForSecondsRealtime(timeToWait);
+            print("swaped " + teleportAmount);
+
+            transform.position = newPos;
+            
+            for (int i = 0; i < _gameHandler.playerList.Count; i++)
+            {
+                StartCoroutine(_gameHandler.playerList[i].GetComponent<PlayerPowerupScript>().ZumBookTeleportShit(_gameHandler.playerList[(i + 1) % _gameHandler.playerList.Count].transform.position, timeToWait * 0.8f, teleportAmount - 1));
+            }
+        }
+        else
+        {
+            for (int i = 0; i < _gameHandler.playerList.Count; i++)
+            {
+                _gameHandler.playerList[i].GetComponent<PlayerPowerupScript>().playerInput.PlayerControls.Enable();
+            }
+
+            Time.timeScale = 1;
+        }
     }
 }
 
@@ -144,6 +177,26 @@ public class DownDashState : State<PlayerPowerupScript>
             owner.powerupStateMachine.ChangeState(owner.defaultState);
         }
     }
+}
+
+public class ZumBokState : State<PlayerPowerupScript>
+{
+    public override void EnterState(PlayerPowerupScript owner)
+    { 
+        //ta alla spelarna
+
+        //hitta en annan pos
+
+        //swap
+
+        //gå ut
+    }
+
+    public override void ExitState(PlayerPowerupScript owner)
+    { }
+
+    public override void UpdateState(PlayerPowerupScript owner)
+    { }
 }
 
 #endregion

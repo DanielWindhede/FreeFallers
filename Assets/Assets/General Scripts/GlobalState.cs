@@ -21,7 +21,7 @@ public class GlobalState : MonoBehaviour
     {
         None,
         GroundSlam,
-        PowerupType2
+        ZumBok
     };
 
     //public PowerupType powerupType;
@@ -37,11 +37,16 @@ public class GlobalState : MonoBehaviour
         get { return _camera; }
     }
 
-    public GameHandler GameHandler
-    {
-        get { return _gameHandler; }
-    }
-
+    public GameHandler GameHandler
+
+    {
+
+        get { return _gameHandler; }
+
+    }
+
+
+
     public Audiomanager AudioManager
     {
         get { return _audiomanager; }

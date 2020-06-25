@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -7,11 +8,11 @@ using UnityEngine.SceneManagement;
 public class GameHandler : MonoBehaviour
 {
 
-    List<GameObject> _players = new List<GameObject>();
+    [NonSerialized] public List<GameObject> playerList = new List<GameObject>();
 
     private void Awake()
     {
-        _players = GlobalState.state.Players;
+        playerList = GlobalState.state.Players;
 
         //InstansiatePlayers();
 
@@ -22,9 +23,9 @@ public class GameHandler : MonoBehaviour
     }
     public void InstansiatePlayers()
     {
-        for (int i = 0; i < _players.Count; i++)
+        for (int i = 0; i < playerList.Count; i++)
         {
-            Instantiate(_players[i]);
+            Instantiate(playerList[i]);
         }
         //?
     }
@@ -36,15 +37,15 @@ public class GameHandler : MonoBehaviour
         //save stats?
 
         //destroy dead player
-        _players.Remove(player);
+        playerList.Remove(player);
         //Destroy(player);
 
         //only one player left
-        if (_players.Count <= 1)
+        if (playerList.Count <= 1)
         {
-            if (_players.Count == 1)
+            if (playerList.Count == 1)
             {
-                EndGame(_players[0]);
+                EndGame(playerList[0]);
             }
             else
             {
