@@ -12,6 +12,8 @@ public class Audiomanager : MonoBehaviour
 
     [Header("SFX")]
     [EventRef]
+    [SerializeField] string powerUpGeneric;
+    [EventRef]
     [SerializeField] string powerUpWine;
     [EventRef]
     [SerializeField] string powerUpBook;
@@ -47,6 +49,10 @@ public class Audiomanager : MonoBehaviour
     [SerializeField] string floorBreak;
 
     #region PowerUps
+    public void PowerUpGeneric (Vector3 position)
+    {
+        RuntimeManager.PlayOneShot(powerUpGeneric, position);
+    }
     public void PowerUpWine(Vector3 position)
     {
         RuntimeManager.PlayOneShot(powerUpWine, position);
