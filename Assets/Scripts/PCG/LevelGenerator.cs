@@ -12,36 +12,43 @@ public class LevelGenerator : MonoBehaviour
 
     private int[,] _level;
 
-    private int _bottomRow = 0;
-    private int _reloadRow = 0;
+    
+    private int _topPosition = 0; //y-coordinate at the top of the screen to be loaded
 
-    private int _loadingRow = 0;
-    private int _loadingColumn = 0;
+
+    private int _bottomPosition = 9; //World Space y-coordinate
+
+    private int _loadingRow = 0; //matrix row
+    private int _screenRow = 0;
+    private int _loadingColumn = 0; //matrix column
 
 
     // Start is called before the first frame update
     void Start()
     {
         _level = new int[_visibleHeight * 3, _gridWidth]; //[rows, columns]
-        GenerateNextScreen(10);
+        GenerateNextScreen();
     }
 
-    private void GenerateNextScreen(int startRow)
+    private void GenerateNextScreen()
     {
         for(int row = 0; row < _visibleHeight; row++)
         {
             for (int column = 0; column < _level.GetLength(1); column++)
             {
-                if (_level[(startRow + row) % (_visibleHeight * 3), column] != 1 && PlaceObjectNow()) //if empty and should spawn
+                if (_level[(-_topPosition + row) % (_visibleHeight * 3), column] != 1 && PlaceObjectNow()) //if empty and should spawn
                 {
-                    _loadingRow = (startRow + row) % (_visibleHeight * 3);
+                    _loadingRow = (-_topPosition + row) % (_visibleHeight * 3);
+                    _screenRow = row;
                     _loadingColumn = column;
 
                     PlaceObstacle();
                 }
             }
         }
+        _topPosition -= _visibleHeight;
     }
+
     private void PlaceObstacle()
     {
         Obstacle obstacle = _obstacles[Random.Range(0, _obstacles.Count)];
@@ -50,14 +57,14 @@ public class LevelGenerator : MonoBehaviour
         {
 
             //place obstacle
-            Instantiate(obstacle, new Vector3(_loadingColumn + ((float)obstacle.size.x / 2), _bottomRow - (_loadingRow + (float)obstacle.size.y / 2), 0), new Quaternion());
+            Instantiate(obstacle, new Vector3(_loadingColumn + ((float)obstacle.size.x / 2), _topPosition -(_screenRow + (float)obstacle.size.y / 2), 0), new Quaternion());
 
             //mark occupide space
             for (int i = 0; i < obstacle.size.y; i++)
             {
                 for (int j = 0; j < obstacle.size.x; j++)
                 {
-                    _level[_loadingRow + i, _loadingColumn + j] = 1;
+                    _level[(_loadingRow + i) % (_visibleHeight * 3), _loadingColumn + j] = 1;
                 }
             }
         }
@@ -82,12 +89,26 @@ public class LevelGenerator : MonoBehaviour
         {
             for (int j = 0; j < obstacle.size.x; j++)
             {
-                if (_level[_loadingRow + i % (_visibleHeight * 3), _loadingColumn + j] == 1)
+                if (_level[(_loadingRow + i) % (_visibleHeight * 3), _loadingColumn + j] == 1)
                 {
                     return false;
                 }
             }
         }
         return true;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            GenerateNextScreen();
+            GetComponent<BoxCollider2D>().transform.Translate(Vector3.down * _visibleHeight);
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawCube(transform.position, new Vector3(_gridWidth, _visibleHeight, 1));
     }
 }
