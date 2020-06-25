@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 3509039498299022204}
   - component: {fileID: 3509039498299022205}
   - component: {fileID: 3509039498299022202}
+  - component: {fileID: 395721418}
   m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
@@ -125,6 +126,7 @@ MonoBehaviour:
     m_Bits: 512
   horizontalRayCount: 4
   verticalRayCount: 4
+  maxSlopeAngle: 70
 --- !u!114 &3509039498299022202
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -140,3 +142,18 @@ MonoBehaviour:
   _maxJumpHeight: 4
   _minJumpHeight: 2
   _timeToJumpApex: 0.4
+--- !u!114 &395721418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3509039498299022203}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a37b4af8e8aadc498fc0a8153344844, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentPowerup: 0
+  _dashSpeed: 25
+  _dashTime: 0.25

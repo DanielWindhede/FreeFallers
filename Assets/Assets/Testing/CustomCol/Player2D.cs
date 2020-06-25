@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,6 +19,7 @@ public class Player2D : MonoBehaviour
     private float _maxJumpVelocity;
     private float _minJumpVelocity;
     private Vector3 _velocity;
+    [NonSerialized] public Vector3 previousVelocity;
     private float _velocityXSmoothing;
 
     // Jump
@@ -61,6 +63,8 @@ public class Player2D : MonoBehaviour
 
     void FixedUpdate()
     {
+        previousVelocity = _velocity;
+
         if (_overrideVelocity)
         {
             _velocity = _tempVelocity;
@@ -120,6 +124,11 @@ public class Player2D : MonoBehaviour
                 _velocity.y = 0;
             }
         }
+    }
+
+    private void OnDestroy()
+    {
+        GlobalState.state.GameHandler.RemovePlayer(this.gameObject);
     }
 
     public void OverrideVelocity(Vector3 amount)

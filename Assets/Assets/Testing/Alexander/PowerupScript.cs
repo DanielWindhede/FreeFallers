@@ -37,14 +37,14 @@ public class PowerupScript : MonoBehaviour
     }
 
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (_playerLayers == (_playerLayers | 1 << other.gameObject.layer))
-        {
-            other.GetComponent<PlayerPowerupScript>().currentPowerup = powerupType;
-            Destroy(this.gameObject);
-        }
-    }
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (_playerLayers == (_playerLayers | 1 << other.gameObject.layer))
+    //    {
+    //        other.GetComponent<PlayerPowerupScript>().currentPowerup = powerupType;
+    //        Destroy(this.gameObject);
+    //    }
+    //}
     
     private void OnTriggerEnter2D(Collider2D other)
     {
