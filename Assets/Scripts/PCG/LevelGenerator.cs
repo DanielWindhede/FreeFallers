@@ -118,9 +118,10 @@ public class LevelGenerator : MonoBehaviour
 
             for (int i = 0; i < _visibleHeight; i++)
             {
+                int row = (_loadingRow + _visibleHeight / 2 + i) % (_visibleHeight * 3);
                 for (int j = 0; j < _gridWidth; j++)
                 {
-                    _level[(_loadingRow + i) % (_visibleHeight * 3), j] = 0;
+                    _level[row , j] = 0;
                 }
             }
         }
