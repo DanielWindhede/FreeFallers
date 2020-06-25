@@ -13,6 +13,8 @@ public class GlobalState : MonoBehaviour
 
     [SerializeField] private GameHandler _gameHandler;
 
+    [SerializeField] private Audiomanager _audiomanager;
+
     //[SerializeField] private AudioManager _audioManager;
 
     public List<GameObject> Players
@@ -28,6 +30,11 @@ public class GlobalState : MonoBehaviour
     public GameHandler GameHandler
     {
         get { return _gameHandler; }
+    }
+
+    public Audiomanager AudioManager
+    {
+        get { return _audiomanager; }
     }
 
     private static GlobalState _state;
