@@ -9,7 +9,7 @@ public class PlayerPowerupScript : MonoBehaviour
     
     private PlayerInput _playerInput;
 
-    private Rigidbody2D _playerRB;
+    //private Rigidbody2D _playerRB;
 
     [SerializeField]float _dashSpeed;
     [SerializeField] float _dashTime;
@@ -19,8 +19,7 @@ public class PlayerPowerupScript : MonoBehaviour
     public DefaultState defaultState = new DefaultState();
     //public DownDashState downDashState = new DownDashState();
 
-    
-    
+    Player2D _player2D;
 
     private void OnEnable()
     {
@@ -43,7 +42,8 @@ public class PlayerPowerupScript : MonoBehaviour
 
         _playerInput.PlayerControls.UsePowerup.performed += ctx => UsePowerup();
 
-        _playerRB = GetComponent<Rigidbody2D>();
+        //_playerRB = GetComponent<Rigidbody2D>();
+        _player2D = GetComponent<Player2D>();
 
         powerupStateMachine = new StateMachine<PlayerPowerupScript>(this);
         defaultState = new DefaultState();
@@ -74,7 +74,7 @@ public class PlayerPowerupScript : MonoBehaviour
             case 1:
                 //kolla att man är i luften 
                 print("Used nr 1");
-                powerupStateMachine.ChangeState(new DownDashState(_playerRB, _dashSpeed, _dashTime));
+                powerupStateMachine.ChangeState(new DownDashState(/*_playerRB,*/_player2D, _dashSpeed, _dashTime));
                 break;
             case 2:
                 print("Used nr 2");
@@ -111,14 +111,16 @@ public class DefaultState : State<PlayerPowerupScript>
 
 public class DownDashState : State<PlayerPowerupScript>
 {
-    Rigidbody2D _playerRB;
+    //Rigidbody2D _playerRB;
+    Player2D _player2D;
     float _dashSpeed;
     float _dashTime;
     Timer _timer;
 
-    public DownDashState(Rigidbody2D playerRB, float dashSpeed, float dashTime)
+    public DownDashState(/*Rigidbody2D playerRB,*/Player2D player2D, float dashSpeed, float dashTime)
     {
-        _playerRB = playerRB;
+        _player2D = player2D;
+        //_playerRB = playerRB;
         _dashSpeed = dashSpeed;
         _dashTime = dashTime;
     }
@@ -137,7 +139,12 @@ public class DownDashState : State<PlayerPowerupScript>
     {
         _timer += Time.deltaTime;
 
-        _playerRB.velocity = new Vector2(_playerRB.velocity.x, -_dashSpeed);
+        //_playerRB.velocity = new Vector2(_playerRB.velocity.x, -_dashSpeed);
+        
+        _player2D.OverrideVelocity(new Vector3(0f, -_dashSpeed, 0f));
+
+        //player2D.OverrideVelocity(new Vector3(player2D.previousVelocity.x, player2D.previousVelocity.y * _slowDownAmount, 0f));
+
         Debug.Log("GOOOO");
         if (_timer.Expired)
         {

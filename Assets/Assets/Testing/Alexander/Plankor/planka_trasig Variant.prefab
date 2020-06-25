@@ -348,7 +348,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 92e4d07f80d20be43bcb5cf29733be6e,
         type: 3}
       propertyPath: m_Name
-      value: planka_trasig (4) Variant
+      value: planka_trasig Variant
       objectReference: {fileID: 0}
     - target: {fileID: 2481922049430427929, guid: 92e4d07f80d20be43bcb5cf29733be6e,
         type: 3}
