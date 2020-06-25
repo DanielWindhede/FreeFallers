@@ -17,6 +17,7 @@ public class Audiomanager : MonoBehaviour
     [SerializeField] string powerUpWine;
     [EventRef]
     [SerializeField] string powerUpBook;
+    EventInstance powerUpBookEvent;
     [EventRef]
     [SerializeField] string powerUpSlam;
     [EventRef]
@@ -60,7 +61,12 @@ public class Audiomanager : MonoBehaviour
 
     public void PowerUpBook(Vector3 position)
     {
-        RuntimeManager.PlayOneShot(powerUpBook, position);
+        powerUpBookEvent = RuntimeManager.CreateInstance(powerUpBook);
+        powerUpBookEvent.start();
+    }
+    public void PowerUpBookCancel(Vector3 position)
+    {
+        powerUpBookEvent.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
     }
 
     public void PowerUpSlam(Vector3 position)
