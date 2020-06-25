@@ -8,6 +8,8 @@ public class DestructibleGroundScript : MonoBehaviour
 
     [SerializeField] float _velocityToBreak;
 
+    [SerializeField] GameObject _brokenBoardPrefab;
+
     
     [SerializeField] [Range(0, 1)] float _slowDownAmount;
 
@@ -42,12 +44,12 @@ public class DestructibleGroundScript : MonoBehaviour
             {
                 //starta en coroutine som deletar bitarna efter x sec
                 collision.gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(collision.gameObject.GetComponent<Rigidbody2D>().velocity.x, collision.relativeVelocity.y * _slowDownAmount);
-                
+
+                Instantiate(_brokenBoardPrefab, transform.position, Quaternion.identity);
+
+
                 Destroy(this.gameObject);
             }
         }
     }
-
-
-
 }

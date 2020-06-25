@@ -135,6 +135,8 @@ public class DownDashState : State<PlayerPowerupScript>
 
     public override void UpdateState(PlayerPowerupScript owner)
     {
+        _timer += Time.deltaTime;
+
         _playerRB.velocity = new Vector2(_playerRB.velocity.x, -_dashSpeed);
         Debug.Log("GOOOO");
         if (_timer.Expired)
