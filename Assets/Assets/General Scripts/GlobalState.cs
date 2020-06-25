@@ -21,7 +21,8 @@ public class GlobalState : MonoBehaviour
     {
         None,
         GroundSlam,
-        ZumBok
+        ZumBok,
+        Smirnoof
     };
 
     //public PowerupType powerupType;

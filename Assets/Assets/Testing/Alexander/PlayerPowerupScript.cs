@@ -9,8 +9,16 @@ public class PlayerPowerupScript : MonoBehaviour
     
     public PlayerInput playerInput;
 
-    [SerializeField]float _dashSpeed;
+    [SerializeField] float _dashSpeed;
     [SerializeField] float _dashTime;
+
+    [SerializeField] float _speedMultiplierOof;
+    [SerializeField] float _oofTime;
+
+    [SerializeField] int _teleportAmountMin;
+    [SerializeField] int _teleportAmountMax;
+    [SerializeField] float _teleportTimeToWait;
+    [SerializeField] float _teleportTimeReduce;
 
     public StateMachine<PlayerPowerupScript> powerupStateMachine;
     
@@ -68,7 +76,7 @@ public class PlayerPowerupScript : MonoBehaviour
                 //Destroy(this.gameObject);
                 break;
 
-            case 1:
+            case 1: //groundslam
                 if (!_controller2D.collisions.below)
                 {
                     print("Used nr 1");
@@ -77,12 +85,12 @@ public class PlayerPowerupScript : MonoBehaviour
                 }
                 break;
 
-            case 2:
+            case 2: //zum
                 print("Used nr 2");
                 currentPowerup = GlobalState.PowerupType.None;
                 Time.timeScale = 0;
 
-                int teleportAmount = (int)Random.Range(4f, 8f);
+                int teleportAmount = (int)Random.Range(_teleportAmountMin, _teleportAmountMax);
 
                 print("time to swap " + teleportAmount + " times");
 
@@ -90,11 +98,25 @@ public class PlayerPowerupScript : MonoBehaviour
                 {
                     _gameHandler.playerList[i].GetComponent<PlayerPowerupScript>().playerInput.PlayerControls.Disable();
 
-                    StartCoroutine(_gameHandler.playerList[i].GetComponent<PlayerPowerupScript>().ZumBookTeleportShit(_gameHandler.playerList[(i + 1) % _gameHandler.playerList.Count].transform.position, 0.5f, teleportAmount));
+                    StartCoroutine(_gameHandler.playerList[i].GetComponent<PlayerPowerupScript>().ZumBookTeleportShit(_gameHandler.playerList[(i + 1) % _gameHandler.playerList.Count].transform.position, _teleportTimeToWait, teleportAmount));
                 }
+                break;
+
+            case 3: //oof
+                currentPowerup = GlobalState.PowerupType.None;
+                print("Used nr 3");
+                StartCoroutine(this.gameObject.GetComponent<PlayerPowerupScript>().Oof());
                 break;
         }
     }
+
+    public IEnumerator Oof()
+    {
+        this.gameObject.GetComponent<Controller2D>()._speedMultiplier = _speedMultiplierOof;
+        yield return new WaitForSecondsRealtime(_oofTime);
+        this.gameObject.GetComponent<Controller2D>()._speedMultiplier = 1f;
+    }
+
 
     public IEnumerator ZumBookTeleportShit(Vector3 newPos, float timeToWait, int teleportAmount)
     {
@@ -107,7 +129,7 @@ public class PlayerPowerupScript : MonoBehaviour
             
             for (int i = 0; i < _gameHandler.playerList.Count; i++)
             {
-                StartCoroutine(_gameHandler.playerList[i].GetComponent<PlayerPowerupScript>().ZumBookTeleportShit(_gameHandler.playerList[(i + 1) % _gameHandler.playerList.Count].transform.position, timeToWait * 0.8f, teleportAmount - 1));
+                StartCoroutine(_gameHandler.playerList[i].GetComponent<PlayerPowerupScript>().ZumBookTeleportShit(_gameHandler.playerList[(i + 1) % _gameHandler.playerList.Count].transform.position, timeToWait * _teleportTimeReduce, teleportAmount - 1));
             }
         }
         else
