@@ -54,9 +54,10 @@ public class DestructibleGroundScript : MonoBehaviour
 
                 Instantiate(_brokenBoardPrefab, transform.position, this.transform.rotation);
 
-
+                GlobalState.state.AudioManager.FloorBreak(transform.position);
                 Destroy(this.gameObject);
             }
+
         }
     }
     

@@ -34,10 +34,17 @@ public class Audiomanager : MonoBehaviour
     [SerializeField] string footSteps;
     [EventRef]
     [SerializeField] string fall;
+    EventInstance fallEvent;
+
+    [EventRef]
+    [SerializeField] string land;
 
     [EventRef]
     [SerializeField] string jump;
     EventInstance jumpEvent;
+
+    [EventRef]
+    [SerializeField] string floorBreak;
 
     #region PowerUps
     public void PowerUpWine(Vector3 position)
@@ -99,6 +106,18 @@ public class Audiomanager : MonoBehaviour
     }
     public void Fall(Vector3 position)
     {
-        RuntimeManager.PlayOneShot(fall, position);
+        fallEvent = RuntimeManager.CreateInstance(fall);
+        fallEvent.start();
+    }
+
+    public void FallCancel(Vector3 position)
+    {
+        fallEvent.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+        RuntimeManager.PlayOneShot(land, position);
+    }
+
+    public void FloorBreak (Vector3 position)
+    {
+        RuntimeManager.PlayOneShot(floorBreak, position);
     }
 }
