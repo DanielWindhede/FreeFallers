@@ -17,6 +17,17 @@ public class GlobalState : MonoBehaviour
 
     //[SerializeField] private AudioManager _audioManager;
 
+    public enum PowerupType
+    {
+        None,
+        GroundSlam,
+        ZumBok,
+        Smirnoof
+    };
+
+    //public PowerupType powerupType;
+
+
     public List<GameObject> Players
     {
         get { return _players; }
@@ -28,9 +39,14 @@ public class GlobalState : MonoBehaviour
     }
 
     public GameHandler GameHandler
+
     {
+
         get { return _gameHandler; }
+
     }
+
+
 
     public Audiomanager AudioManager
     {

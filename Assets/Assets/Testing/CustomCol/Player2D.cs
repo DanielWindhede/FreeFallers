@@ -51,6 +51,9 @@ public class Player2D : MonoBehaviour
         _playerInput.PlayerControls.Jump.started += ctx => _jumpType = 1;
         _playerInput.PlayerControls.Jump.canceled += ctx => _jumpType = 2;
         _playerInput.PlayerControls.Pause.performed += ctx => MouseExplosion();
+
+
+        DontDestroyOnLoad(this.gameObject);
     }
 
     void MouseExplosion()
@@ -63,6 +66,8 @@ public class Player2D : MonoBehaviour
 
     void FixedUpdate()
     {
+        print(GlobalState.state);
+
         previousVelocity = _velocity;
 
         if (_overrideVelocity)
@@ -128,6 +133,8 @@ public class Player2D : MonoBehaviour
 
     private void OnDestroy()
     {
+        print(GlobalState.state);
+        print(GlobalState.state.GameHandler);
         GlobalState.state.GameHandler.RemovePlayer(this.gameObject);
     }
 

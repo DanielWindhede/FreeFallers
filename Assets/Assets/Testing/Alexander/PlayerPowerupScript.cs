@@ -5,108 +5,156 @@ using UnityEngine;
 
 public class PlayerPowerupScript : MonoBehaviour
 {
-    public PowerupScript.PowerupType currentPowerup;
+    public GlobalState.PowerupType currentPowerup;
     
-    private PlayerInput _playerInput;
+    public PlayerInput playerInput;
 
-    //private Rigidbody2D _playerRB;
-
-    [SerializeField]float _dashSpeed;
+    [SerializeField] float _dashSpeed;
     [SerializeField] float _dashTime;
+
+    [SerializeField] float _speedMultiplierOof;
+    [SerializeField] float _oofTime;
+
+    [SerializeField] int _teleportAmountMin;
+    [SerializeField] int _teleportAmountMax;
+    [SerializeField] float _teleportTimeToWait;
+    [SerializeField] float _teleportTimeReduce;
 
     public StateMachine<PlayerPowerupScript> powerupStateMachine;
     
     public DefaultState defaultState = new DefaultState();
-    //public DownDashState downDashState = new DownDashState();
 
-    Player2D _player2D;
+    private Player2D _player2D;
+    private Controller2D _controller2D;
+
+    private GameHandler _gameHandler;
 
     private void OnEnable()
     {
-        if (_playerInput == null)
-            _playerInput = new PlayerInput();
-        _playerInput.PlayerControls.Enable();
+        if (playerInput == null)
+            playerInput = new PlayerInput();
+        playerInput.PlayerControls.Enable();
     }
 
     private void OnDisable()
     {
-        _playerInput.PlayerControls.Disable();
+        playerInput.PlayerControls.Disable();
     }
 
     private void Awake()
     {
-        currentPowerup = PowerupScript.PowerupType.None;
+        currentPowerup = GlobalState.PowerupType.None;
+        _gameHandler = GlobalState.state.GameHandler;
 
-        if (_playerInput == null)
-            _playerInput = new PlayerInput();
 
-        _playerInput.PlayerControls.UsePowerup.performed += ctx => UsePowerup();
+        if (playerInput == null)
+            playerInput = new PlayerInput();
+
+        playerInput.PlayerControls.UsePowerup.performed += ctx => UsePowerup();
 
         //_playerRB = GetComponent<Rigidbody2D>();
         _player2D = GetComponent<Player2D>();
+        _controller2D = GetComponent<Controller2D>();
 
         powerupStateMachine = new StateMachine<PlayerPowerupScript>(this);
         defaultState = new DefaultState();
 
         powerupStateMachine.ChangeState(defaultState);
     }
-    void Start()
-    {
-        
-    }
 
     void Update()
     {
-        //print(GetComponent<Rigidbody>().velocity.y);
-
         powerupStateMachine.Update();
     }
 
     private void UsePowerup()
     {
-        print(currentPowerup);
-
         switch ((int)currentPowerup)
         {
             case 0:
                 print("No power");
+                //Destroy(this.gameObject);
                 break;
-            case 1:
-                //kolla att man är i luften 
-                print("Used nr 1");
-                powerupStateMachine.ChangeState(new DownDashState(/*_playerRB,*/_player2D, _dashSpeed, _dashTime));
+
+            case 1: //groundslam
+                if (!_controller2D.collisions.below)
+                {
+                    print("Used nr 1");
+                    currentPowerup = GlobalState.PowerupType.None;
+                    powerupStateMachine.ChangeState(new DownDashState(_player2D, _dashSpeed, _dashTime));
+                }
                 break;
-            case 2:
+
+            case 2: //zum
                 print("Used nr 2");
+                currentPowerup = GlobalState.PowerupType.None;
+                Time.timeScale = 0;
+
+                int teleportAmount = (int)Random.Range(_teleportAmountMin, _teleportAmountMax);
+
+                print("time to swap " + teleportAmount + " times");
+
+                for (int i = 0; i < _gameHandler.playerList.Count; i++)
+                {
+                    _gameHandler.playerList[i].GetComponent<PlayerPowerupScript>().playerInput.PlayerControls.Disable();
+
+                    StartCoroutine(_gameHandler.playerList[i].GetComponent<PlayerPowerupScript>().ZumBookTeleportShit(_gameHandler.playerList[(i + 1) % _gameHandler.playerList.Count].transform.position, _teleportTimeToWait, teleportAmount));
+                }
+                break;
+
+            case 3: //oof
+                currentPowerup = GlobalState.PowerupType.None;
+                print("Used nr 3");
+                StartCoroutine(this.gameObject.GetComponent<PlayerPowerupScript>().Oof());
                 break;
         }
+    }
 
-        //flytta sen
-        currentPowerup = PowerupScript.PowerupType.None;
+    public IEnumerator Oof()
+    {
+        this.gameObject.GetComponent<Controller2D>()._speedMultiplier = _speedMultiplierOof;
+        yield return new WaitForSecondsRealtime(_oofTime);
+        this.gameObject.GetComponent<Controller2D>()._speedMultiplier = 1f;
+    }
+
+
+    public IEnumerator ZumBookTeleportShit(Vector3 newPos, float timeToWait, int teleportAmount)
+    {
+        if (teleportAmount > 0)
+        {
+            yield return new WaitForSecondsRealtime(timeToWait);
+            print("swaped " + teleportAmount);
+
+            transform.position = newPos;
+            
+            for (int i = 0; i < _gameHandler.playerList.Count; i++)
+            {
+                StartCoroutine(_gameHandler.playerList[i].GetComponent<PlayerPowerupScript>().ZumBookTeleportShit(_gameHandler.playerList[(i + 1) % _gameHandler.playerList.Count].transform.position, timeToWait * _teleportTimeReduce, teleportAmount - 1));
+            }
+        }
+        else
+        {
+            for (int i = 0; i < _gameHandler.playerList.Count; i++)
+            {
+                _gameHandler.playerList[i].GetComponent<PlayerPowerupScript>().playerInput.PlayerControls.Enable();
+            }
+
+            Time.timeScale = 1;
+        }
     }
 }
 
+#region States
 public class DefaultState : State<PlayerPowerupScript>
 {
-    public DefaultState()
-    {
-
-    }
-
     public override void EnterState(PlayerPowerupScript owner)
-    {
-
-    }
+    { }
 
     public override void ExitState(PlayerPowerupScript owner)
-    {
-
-    }
+    { }
 
     public override void UpdateState(PlayerPowerupScript owner)
-    {
-
-    }
+    { }
 }
 
 public class DownDashState : State<PlayerPowerupScript>
@@ -152,4 +200,26 @@ public class DownDashState : State<PlayerPowerupScript>
         }
     }
 }
+
+public class ZumBokState : State<PlayerPowerupScript>
+{
+    public override void EnterState(PlayerPowerupScript owner)
+    { 
+        //ta alla spelarna
+
+        //hitta en annan pos
+
+        //swap
+
+        //gå ut
+    }
+
+    public override void ExitState(PlayerPowerupScript owner)
+    { }
+
+    public override void UpdateState(PlayerPowerupScript owner)
+    { }
+}
+
+#endregion
 
