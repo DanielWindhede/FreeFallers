@@ -876,6 +876,30 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 395721418, guid: b6aea7d8e233b2b47b17ae93f3ad63be, type: 3}
+      propertyPath: _speedMultiplierOof
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 395721418, guid: b6aea7d8e233b2b47b17ae93f3ad63be, type: 3}
+      propertyPath: _teleportAmountMin
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 395721418, guid: b6aea7d8e233b2b47b17ae93f3ad63be, type: 3}
+      propertyPath: _teleportAmountMax
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 395721418, guid: b6aea7d8e233b2b47b17ae93f3ad63be, type: 3}
+      propertyPath: _teleportTimeToWait
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 395721418, guid: b6aea7d8e233b2b47b17ae93f3ad63be, type: 3}
+      propertyPath: _teleportTimeReduce
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 395721418, guid: b6aea7d8e233b2b47b17ae93f3ad63be, type: 3}
+      propertyPath: _oofTime
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3509039498299022177, guid: b6aea7d8e233b2b47b17ae93f3ad63be,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2045,6 +2069,30 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 395721418, guid: b6aea7d8e233b2b47b17ae93f3ad63be, type: 3}
+      propertyPath: _speedMultiplierOof
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 395721418, guid: b6aea7d8e233b2b47b17ae93f3ad63be, type: 3}
+      propertyPath: _oofTime
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 395721418, guid: b6aea7d8e233b2b47b17ae93f3ad63be, type: 3}
+      propertyPath: _teleportAmountMin
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 395721418, guid: b6aea7d8e233b2b47b17ae93f3ad63be, type: 3}
+      propertyPath: _teleportAmountMax
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 395721418, guid: b6aea7d8e233b2b47b17ae93f3ad63be, type: 3}
+      propertyPath: _teleportTimeToWait
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 395721418, guid: b6aea7d8e233b2b47b17ae93f3ad63be, type: 3}
+      propertyPath: _teleportTimeReduce
+      value: 0.8
+      objectReference: {fileID: 0}
     - target: {fileID: 3509039498299022177, guid: b6aea7d8e233b2b47b17ae93f3ad63be,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2409,6 +2457,30 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 395721418, guid: b6aea7d8e233b2b47b17ae93f3ad63be, type: 3}
+      propertyPath: _speedMultiplierOof
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 395721418, guid: b6aea7d8e233b2b47b17ae93f3ad63be, type: 3}
+      propertyPath: _oofTime
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 395721418, guid: b6aea7d8e233b2b47b17ae93f3ad63be, type: 3}
+      propertyPath: _teleportAmountMin
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 395721418, guid: b6aea7d8e233b2b47b17ae93f3ad63be, type: 3}
+      propertyPath: _teleportAmountMax
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 395721418, guid: b6aea7d8e233b2b47b17ae93f3ad63be, type: 3}
+      propertyPath: _teleportTimeToWait
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 395721418, guid: b6aea7d8e233b2b47b17ae93f3ad63be, type: 3}
+      propertyPath: _teleportTimeReduce
+      value: 0.8
+      objectReference: {fileID: 0}
     - target: {fileID: 3509039498299022177, guid: b6aea7d8e233b2b47b17ae93f3ad63be,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2848,7 +2920,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87d226a4b95631e4fa83c9085d8bb175, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _powerupType: 2
+  _powerupType: 3
 --- !u!61 &1841791129
 BoxCollider2D:
   m_ObjectHideFlags: 0

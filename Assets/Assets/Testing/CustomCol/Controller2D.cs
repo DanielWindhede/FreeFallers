@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,6 +13,8 @@ public class Controller2D : MonoBehaviour
     [SerializeField] private int verticalRayCount = 4;
 
     [SerializeField] private float maxSlopeAngle = 80;
+
+    [NonSerialized] public float _speedMultiplier = 1;
 
     private float horizontalRaySpacing;
     private float verticalRaySpacing;
@@ -36,6 +39,7 @@ public class Controller2D : MonoBehaviour
         {
             DescendSlope(ref moveAmount);
         }
+        moveAmount *= _speedMultiplier;
         if (moveAmount.x != 0)
         {
             collisions.faceDir = (int)Mathf.Sign(moveAmount.x);
@@ -45,7 +49,7 @@ public class Controller2D : MonoBehaviour
         {
             VerticalCollisions(ref moveAmount);
         }
-
+        
         transform.Translate(moveAmount);
     }
 
