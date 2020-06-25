@@ -15,6 +15,16 @@ public class GlobalState : MonoBehaviour
 
     //[SerializeField] private AudioManager _audioManager;
 
+    public enum PowerupType
+    {
+        None,
+        GroundSlam,
+        PowerupType2
+    };
+
+    //public PowerupType powerupType;
+
+
     public List<GameObject> Players
     {
         get { return _players; }

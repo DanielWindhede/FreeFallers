@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 
 public class GameHandler : MonoBehaviour
 {
@@ -53,7 +55,11 @@ public class GameHandler : MonoBehaviour
 
     private void EndGame(GameObject winner)
     {
-        print("amma weener ");
+
+        print( winner.gameObject.name + "amma weener ");
+
+        SceneManager.LoadScene(1);
+        
         //SOME1 WIIBNER
 
         //some cool camera zoom-in
@@ -68,6 +74,8 @@ public class GameHandler : MonoBehaviour
     private void EndGame()
     {
         print("Issa draw ");
+        SceneManager.LoadScene(2);
+
         //ITS A DRAW (NO CONTEST (AWWWWWW))
 
         //some cool camera zoom-in

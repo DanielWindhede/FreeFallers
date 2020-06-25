@@ -51,6 +51,9 @@ public class Player2D : MonoBehaviour
         _playerInput.PlayerControls.Jump.started += ctx => _jumpType = 1;
         _playerInput.PlayerControls.Jump.canceled += ctx => _jumpType = 2;
         _playerInput.PlayerControls.Pause.performed += ctx => MouseExplosion();
+
+
+        DontDestroyOnLoad(this.gameObject);
     }
 
     void MouseExplosion()
