@@ -6,6 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: d1c3109bdb54ad54c8a2b2838528e640
+    path: Assets/Assets/Testing/Alexander/Alexander.unity
+    guid: 1d7ec9cfefacbce4fbb089af3cc07359
+  - enabled: 1
+    path: Assets/Assets/Scenes/Game Over Winner Scene.unity
+    guid: 2c856fb2fa73a454ea686de8e6150570
+  - enabled: 1
+    path: Assets/Assets/Scenes/Game Over Draw Scene.unity
+    guid: 78ca0b5890782484f9e8a6b8aaa46990
   m_configObjects: {}

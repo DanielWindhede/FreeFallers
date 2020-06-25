@@ -260,8 +260,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87d226a4b95631e4fa83c9085d8bb175, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  powerupType: 1
-  _player: {fileID: 395721411}
+  _powerupType: 1
 --- !u!61 &235754740
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -907,6 +906,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 3509039498299022203, guid: b6aea7d8e233b2b47b17ae93f3ad63be,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3509039498299022207, guid: b6aea7d8e233b2b47b17ae93f3ad63be,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ee95e0151934a6a46a88119cbc1305e6, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b6aea7d8e233b2b47b17ae93f3ad63be, type: 3}
 --- !u!1001 &791775997
@@ -2203,6 +2212,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 3509039498299022207, guid: b6aea7d8e233b2b47b17ae93f3ad63be,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 273cb9cb5280c27408512ecde035708d, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b6aea7d8e233b2b47b17ae93f3ad63be, type: 3}
 --- !u!1 &1741222949

@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PlayerPowerupScript : MonoBehaviour
 {
-    public PowerupScript.PowerupType currentPowerup;
+    public GlobalState.PowerupType currentPowerup;
     
     private PlayerInput _playerInput;
 
@@ -20,6 +20,7 @@ public class PlayerPowerupScript : MonoBehaviour
     //public DownDashState downDashState = new DownDashState();
 
     Player2D _player2D;
+    Controller2D _controller2D;
 
     private void OnEnable()
     {
@@ -35,7 +36,7 @@ public class PlayerPowerupScript : MonoBehaviour
 
     private void Awake()
     {
-        currentPowerup = PowerupScript.PowerupType.None;
+        currentPowerup = GlobalState.PowerupType.None;
 
         if (_playerInput == null)
             _playerInput = new PlayerInput();
@@ -44,6 +45,7 @@ public class PlayerPowerupScript : MonoBehaviour
 
         //_playerRB = GetComponent<Rigidbody2D>();
         _player2D = GetComponent<Player2D>();
+        _controller2D = GetComponent<Controller2D>();
 
         powerupStateMachine = new StateMachine<PlayerPowerupScript>(this);
         defaultState = new DefaultState();
@@ -57,24 +59,26 @@ public class PlayerPowerupScript : MonoBehaviour
 
     void Update()
     {
-        //print(GetComponent<Rigidbody>().velocity.y);
 
         powerupStateMachine.Update();
     }
 
     private void UsePowerup()
     {
-        print(currentPowerup);
-
         switch ((int)currentPowerup)
         {
             case 0:
                 print("No power");
+                //Destroy(this.gameObject);
                 break;
             case 1:
+                if (!_controller2D.collisions.below)
+                {
+                    print("Used nr 1");
+                    currentPowerup = GlobalState.PowerupType.None;
+                    powerupStateMachine.ChangeState(new DownDashState(_player2D, _dashSpeed, _dashTime));
+                }
                 //kolla att man är i luften 
-                print("Used nr 1");
-                powerupStateMachine.ChangeState(new DownDashState(/*_playerRB,*/_player2D, _dashSpeed, _dashTime));
                 break;
             case 2:
                 print("Used nr 2");
@@ -82,31 +86,20 @@ public class PlayerPowerupScript : MonoBehaviour
         }
 
         //flytta sen
-        currentPowerup = PowerupScript.PowerupType.None;
     }
 }
 
+#region States
 public class DefaultState : State<PlayerPowerupScript>
 {
-    public DefaultState()
-    {
-
-    }
-
     public override void EnterState(PlayerPowerupScript owner)
-    {
-
-    }
+    { }
 
     public override void ExitState(PlayerPowerupScript owner)
-    {
-
-    }
+    { }
 
     public override void UpdateState(PlayerPowerupScript owner)
-    {
-
-    }
+    { }
 }
 
 public class DownDashState : State<PlayerPowerupScript>
@@ -152,4 +145,6 @@ public class DownDashState : State<PlayerPowerupScript>
         }
     }
 }
+
+#endregion
 
