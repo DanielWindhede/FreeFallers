@@ -260,8 +260,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87d226a4b95631e4fa83c9085d8bb175, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  powerupType: 1
-  _player: {fileID: 395721411}
+  _powerupType: 0
 --- !u!61 &235754740
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -565,7 +564,7 @@ MonoBehaviour:
   fall: 
   land: 
   jump: 
-  floorBreak: event:/FloorBreak
+  floorBreak: event:/SFX/FloorBreak
 --- !u!1 &327474302
 GameObject:
   m_ObjectHideFlags: 0
