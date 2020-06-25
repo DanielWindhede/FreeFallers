@@ -15,20 +15,16 @@ public class PowerupScript : MonoBehaviour
 
     public PowerupType powerupType;
 
-
-    //använd global state sen
-    [SerializeField] GameObject _player;
     LayerMask _playerLayers;
 
     private void Awake()
     {
-        //_player = GlobalState.state.Player.gameObject;
-        _playerLayers |= 1 << _player.layer;
+        _playerLayers |= 1 << GlobalState.state.Players[0].layer;
     }
 
     void Start()
     {
-        
+
     }
 
     void Update()

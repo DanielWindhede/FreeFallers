@@ -63,6 +63,8 @@ public class Player2D : MonoBehaviour
 
     void FixedUpdate()
     {
+        print(GlobalState.state);
+
         previousVelocity = _velocity;
 
         if (_overrideVelocity)
@@ -128,6 +130,8 @@ public class Player2D : MonoBehaviour
 
     private void OnDestroy()
     {
+        print(GlobalState.state);
+        print(GlobalState.state.GameHandler);
         GlobalState.state.GameHandler.RemovePlayer(this.gameObject);
     }
 

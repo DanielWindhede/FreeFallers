@@ -70,6 +70,7 @@ public class PlayerPowerupScript : MonoBehaviour
         {
             case 0:
                 print("No power");
+                Destroy(this.gameObject);
                 break;
             case 1:
                 //kolla att man är i luften 
@@ -86,27 +87,17 @@ public class PlayerPowerupScript : MonoBehaviour
     }
 }
 
+#region States
 public class DefaultState : State<PlayerPowerupScript>
 {
-    public DefaultState()
-    {
-
-    }
-
     public override void EnterState(PlayerPowerupScript owner)
-    {
-
-    }
+    { }
 
     public override void ExitState(PlayerPowerupScript owner)
-    {
-
-    }
+    { }
 
     public override void UpdateState(PlayerPowerupScript owner)
-    {
-
-    }
+    { }
 }
 
 public class DownDashState : State<PlayerPowerupScript>
@@ -152,4 +143,6 @@ public class DownDashState : State<PlayerPowerupScript>
         }
     }
 }
+
+#endregion
 

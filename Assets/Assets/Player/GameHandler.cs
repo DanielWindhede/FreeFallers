@@ -67,6 +67,7 @@ public class GameHandler : MonoBehaviour
     
     private void EndGame()
     {
+        print("Issa draw ");
         //ITS A DRAW (NO CONTEST (AWWWWWW))
 
         //some cool camera zoom-in
