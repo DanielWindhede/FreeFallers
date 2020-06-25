@@ -23,10 +23,14 @@ public class LevelGenerator : MonoBehaviour
     private int _loadingColumn = 0; //matrix column
 
 
+
     // Start is called before the first frame update
     void Start()
     {
         _level = new int[_visibleHeight * 3, _gridWidth]; //[rows, columns]
+
+        
+
         GenerateNextScreen();
     }
 
@@ -57,7 +61,7 @@ public class LevelGenerator : MonoBehaviour
         {
 
             //place obstacle
-            Instantiate(obstacle, new Vector3(_loadingColumn + ((float)obstacle.size.x / 2), _topPosition -(_screenRow + (float)obstacle.size.y / 2), 0), new Quaternion());
+            Instantiate(obstacle, new Vector3(_loadingColumn + ((float)obstacle.size.x / 2) - _gridWidth / 2, _topPosition -(_screenRow + (float)obstacle.size.y / 2), 0), new Quaternion());
 
             //mark occupide space
             for (int i = 0; i < obstacle.size.y; i++)
@@ -100,15 +104,32 @@ public class LevelGenerator : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Player")
+        if (/*collision.gameObject.GetComponent<Player2D>()*/ collision.gameObject.tag == "Player")
         {
             GenerateNextScreen();
             GetComponent<BoxCollider2D>().transform.Translate(Vector3.down * _visibleHeight);
+
+            RaycastHit2D[] hits = Physics2D.BoxCastAll((Vector2)transform.position + new Vector2(0, _visibleHeight * 2), new Vector2(_gridWidth, _visibleHeight), 0, Vector2.up, 0.5f);
+
+            foreach (RaycastHit2D hit in hits)
+            {
+                Destroy(hit.collider.gameObject);
+            }
+
+            for (int i = 0; i < _visibleHeight; i++)
+            {
+                for (int j = 0; j < _gridWidth; j++)
+                {
+                    _level[(_loadingRow + i) % (_visibleHeight * 3), j] = 0;
+                }
+            }
         }
     }
 
     private void OnDrawGizmos()
     {
+        Gizmos.color = new Color(1f, 1f, 0, 0.2f);
+
         Gizmos.DrawCube(transform.position, new Vector3(_gridWidth, _visibleHeight, 1));
     }
 }
