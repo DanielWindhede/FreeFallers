@@ -23,6 +23,9 @@ public class PlayerPowerupScript : MonoBehaviour
     [SerializeField] float _teleportTimeToWait;
     [SerializeField] float _teleportTimeReduce;
 
+    [SerializeField] float _gravityMultiplierBurger;
+    [SerializeField] float _burgerTime;
+
     public StateMachine<PlayerPowerupScript> powerupStateMachine;
     
     public DefaultState defaultState = new DefaultState();
@@ -92,6 +95,7 @@ public class PlayerPowerupScript : MonoBehaviour
                 print("Used nr 2");
                 currentPowerup = GlobalState.PowerupType.None;
                 Time.timeScale = 0;
+                PlayParticle();
 
                 int teleportAmount = (int)Random.Range(_teleportAmountMin, _teleportAmountMax);
 
@@ -103,13 +107,18 @@ public class PlayerPowerupScript : MonoBehaviour
 
                     StartCoroutine(_gameHandler.playerList[i].GetComponent<PlayerPowerupScript>().ZumBookTeleportShit(_gameHandler.playerList[(i + 1) % _gameHandler.playerList.Count].transform.position, _teleportTimeToWait, teleportAmount));
                 }
-                PlayParticle();
                 break;
 
             case 3: //oof
                 currentPowerup = GlobalState.PowerupType.None;
                 print("Used nr 3");
                 StartCoroutine(this.gameObject.GetComponent<PlayerPowerupScript>().Oof());
+                PlayParticle();
+                break;
+            case 4: //burger
+                currentPowerup = GlobalState.PowerupType.None;
+                print("Used nr 3");
+                StartCoroutine(this.gameObject.GetComponent<PlayerPowerupScript>().Burger());
                 PlayParticle();
                 break;
         }
@@ -125,6 +134,12 @@ public class PlayerPowerupScript : MonoBehaviour
         }
     }
 
+    public IEnumerator Burger()
+    {
+        this.gameObject.GetComponent<Player2D>()._gravityMultiplier = _gravityMultiplierBurger;
+        yield return new WaitForSecondsRealtime(_burgerTime);
+        this.gameObject.GetComponent<Player2D>()._gravityMultiplier = 1f;
+    }
     public IEnumerator Oof()
     {
         this.gameObject.GetComponent<Controller2D>()._speedMultiplier = _speedMultiplierOof;
