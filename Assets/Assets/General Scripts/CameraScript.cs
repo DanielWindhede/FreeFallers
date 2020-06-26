@@ -6,17 +6,24 @@ public class CameraScript : MonoBehaviour
 {
 
     [SerializeField] [Range(0.01f, 1)] float _folowAmount;
+    [SerializeField] float _folowSpeed;
 
     [SerializeField] float _cloudSpawnDistanceBase;
     [SerializeField] float _cloudSpawnDistanceRandInc;
-    public float _nextCloudSpawnPosY;
-    public float _lastCloudSpawnPosY;
+    float _nextCloudSpawnPosY;
+    float _lastCloudSpawnPosY;
+    
+    [SerializeField] float _fallingObjectSpawnDistanceBase;
+    [SerializeField] float _fallingObjecSpawnDistanceRandInc;
+    float _nextFallingObjecSpawnPosY;
+    float _lastFallingObjecSpawnPosY;
 
 
 
 
     Camera _camera;
     [SerializeField] BackgroundSpawnerScript _cloudSpawner;
+    [SerializeField] BackgroundSpawnerScript _fallingObjectSpawner;
 
     List<GameObject> _players = new List<GameObject>();
 
@@ -53,16 +60,22 @@ public class CameraScript : MonoBehaviour
         //if (_playerToFolow.transform.position.y < transform.position.y)
         if (_playerToFolow.transform.position.y + _camera.orthographicSize * _folowAmount < transform.position.y)
         {
-            transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, _playerToFolow.transform.position.y + _camera.orthographicSize * _folowAmount, -10f), 0.5f);
+            transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, _playerToFolow.transform.position.y + _camera.orthographicSize * _folowAmount, -10f), _folowSpeed);
             _lastCloudSpawnPosY = transform.position.y;
-            if (_lastCloudSpawnPosY < _nextCloudSpawnPosY)
+            _lastFallingObjecSpawnPosY = transform.position.y;
+
+            if (_lastCloudSpawnPosY < _nextFallingObjecSpawnPosY)
             {
-                print("floof");
-                _cloudSpawner.spawnRandomBackgroundObjectAtRandomPosition();
+                _cloudSpawner.spawnBackgroundObject();
                 _nextCloudSpawnPosY = _lastCloudSpawnPosY - _cloudSpawnDistanceBase - Random.Range(0f, _cloudSpawnDistanceRandInc);
             }
-        }
+            
+            if (_lastFallingObjecSpawnPosY < _nextFallingObjecSpawnPosY)
+            {
+                _fallingObjectSpawner.spawnBackgroundObject();
 
-        //transform.position = Vector3.MoveTowards(transform.position, new Vector3(_playerToFolow.transform.position.x, _playerToFolow.transform.position.y, -10f), 0.5f);
+                _nextFallingObjecSpawnPosY = _lastFallingObjecSpawnPosY - _fallingObjectSpawnDistanceBase - Random.Range(0f, _fallingObjecSpawnDistanceRandInc);
+            }
+        }
     }
 }

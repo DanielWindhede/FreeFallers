@@ -28,12 +28,14 @@ public class BackgroundSpawnerScript : MonoBehaviour
         //spawnRandomBackgroundObjectAtRandomPosition();
     }
 
-    public void spawnRandomBackgroundObjectAtRandomPosition()
+    public void spawnBackgroundObject()
     {
         int index = Random.Range(0, _backgroundObjectsToSpawn.Length);
 
         float spawnPosX = Random.Range(-_cameraWidth, _cameraWidth);
 
-        Instantiate(_backgroundObjectsToSpawn[index], new Vector3(gameObject.transform.position.x + spawnPosX, gameObject.transform.position.y, 0f), Quaternion.identity);
+        GameObject _object =  Instantiate(_backgroundObjectsToSpawn[index], new Vector3(gameObject.transform.position.x + spawnPosX, gameObject.transform.position.y, 0f), Quaternion.identity);
+
+        _object.transform.parent = transform.parent;
     }
 }
