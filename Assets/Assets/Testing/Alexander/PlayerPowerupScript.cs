@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using UnityEditorInternal;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class PlayerPowerupScript : MonoBehaviour
 {
+    [SerializeField] private VisualEffect particle;
+
     public GlobalState.PowerupType currentPowerup;
     
     public PlayerInput playerInput;
@@ -46,7 +49,6 @@ public class PlayerPowerupScript : MonoBehaviour
         currentPowerup = GlobalState.PowerupType.None;
         _gameHandler = GlobalState.state.GameHandler;
 
-
         if (playerInput == null)
             playerInput = new PlayerInput();
 
@@ -82,6 +84,7 @@ public class PlayerPowerupScript : MonoBehaviour
                     print("Used nr 1");
                     currentPowerup = GlobalState.PowerupType.None;
                     powerupStateMachine.ChangeState(new DownDashState(_player2D, _dashSpeed, _dashTime));
+                    PlayParticle();
                 }
                 break;
 
@@ -100,13 +103,25 @@ public class PlayerPowerupScript : MonoBehaviour
 
                     StartCoroutine(_gameHandler.playerList[i].GetComponent<PlayerPowerupScript>().ZumBookTeleportShit(_gameHandler.playerList[(i + 1) % _gameHandler.playerList.Count].transform.position, _teleportTimeToWait, teleportAmount));
                 }
+                PlayParticle();
                 break;
 
             case 3: //oof
                 currentPowerup = GlobalState.PowerupType.None;
                 print("Used nr 3");
                 StartCoroutine(this.gameObject.GetComponent<PlayerPowerupScript>().Oof());
+                PlayParticle();
                 break;
+        }
+
+    }
+
+
+    private void PlayParticle()
+    {
+        if (particle != null)
+        {
+            particle.Play();
         }
     }
 
@@ -192,8 +207,7 @@ public class DownDashState : State<PlayerPowerupScript>
         _player2D.OverrideVelocity(new Vector3(0f, -_dashSpeed, 0f));
 
         //player2D.OverrideVelocity(new Vector3(player2D.previousVelocity.x, player2D.previousVelocity.y * _slowDownAmount, 0f));
-
-        Debug.Log("GOOOO");
+        
         if (_timer.Expired)
         {
             owner.powerupStateMachine.ChangeState(owner.defaultState);

@@ -32,6 +32,8 @@ public class Player2D : MonoBehaviour
     private Controller2D _controller;
     private Vector2 _inputDirection;
     private PlayerInput _playerInput;
+    [SerializeField] private Animator _animator;
+    private SpriteRenderer _spriteRenderer;
 
     private void OnEnable() { _playerInput.PlayerControls.Enable(); }
     private void OnDisable() { _playerInput.PlayerControls.Disable(); }
@@ -41,6 +43,7 @@ public class Player2D : MonoBehaviour
         // Initialization
         _controller = GetComponent<Controller2D>();
         _playerInput = new PlayerInput();
+        _spriteRenderer = _animator.GetComponent<SpriteRenderer>();
 
         _gravity = -(2 * _maxJumpHeight) / Mathf.Pow(_timeToJumpApex, 2);
         _maxJumpVelocity = Mathf.Abs(_gravity) * _timeToJumpApex;
@@ -64,10 +67,23 @@ public class Player2D : MonoBehaviour
         //OverrideVelocity(new Vector2(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)) * 1000 * Time.deltaTime);
     }
 
+    private void Update()
+    {
+        if (_animator)
+        {
+            _animator.SetBool("Grounded", _controller.collisions.below);
+            if (Mathf.Abs(_velocity.x) < 0.1f)
+                _animator.SetBool("Running", false);
+            else
+            {
+                _animator.SetBool("Running", true);
+                _spriteRenderer.flipX = ((Mathf.Sign(_velocity.x) >= 0) ? true : false);
+            }
+        }
+    }
+
     void FixedUpdate()
     {
-        print(GlobalState.state);
-
         previousVelocity = _velocity;
 
         if (_overrideVelocity)
@@ -100,6 +116,7 @@ public class Player2D : MonoBehaviour
                         _velocity.y = _maxJumpVelocity;
                     }
                     _jumped = true;
+                    _animator.SetTrigger("Jump");
                 }
             }
             else

@@ -133,6 +133,9 @@ GameObject:
   - component: {fileID: 107781192}
   - component: {fileID: 107781191}
   - component: {fileID: 107781194}
+  - component: {fileID: 107781197}
+  - component: {fileID: 107781196}
+  - component: {fileID: 107781195}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -174,8 +177,8 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 0
-  orthographic size: 5
+  orthographic: 1
+  orthographic size: 11.53
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -236,6 +239,55 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
+--- !u!114 &107781195
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 107781190}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5d9bc57accaf5f4db057dcb83fe9ace, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _players:
+  - {fileID: 173576104}
+  _camera: {fileID: 107781192}
+  _gameHandler: {fileID: 107781196}
+  _audiomanager: {fileID: 0}
+--- !u!114 &107781196
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 107781190}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2cdc16a0f0d23146aa345e22b3d3058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &107781197
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 107781190}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e87db8f3f5c2e043a5a44dce2846abf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _folowAmount: 0.624
+  _playerToFolow: {fileID: 0}
+--- !u!1 &173576104 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3509039498299022203, guid: b6aea7d8e233b2b47b17ae93f3ad63be,
+    type: 3}
+  m_PrefabInstance: {fileID: 1051797445}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1051797445
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -306,7 +358,7 @@ PrefabInstance:
     - target: {fileID: 3509039498299022203, guid: b6aea7d8e233b2b47b17ae93f3ad63be,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b6aea7d8e233b2b47b17ae93f3ad63be, type: 3}
@@ -506,7 +558,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d6223cabf4fecd4a9ceec007dc0feba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _visibleHeight: 11
+  _visibleHeight: 23
   _spawnRate: 0.044
   _obstacles:
   - {fileID: 410613003908229055, guid: 781b7b2d1fe0224408f3fa5b8704bca5, type: 3}

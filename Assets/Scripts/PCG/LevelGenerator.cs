@@ -15,8 +15,8 @@ public class LevelGenerator : MonoBehaviour
     
     private int _topPosition = 0; //y-coordinate at the top of the screen to be loaded
 
-
-    private int _bottomPosition = 9; //World Space y-coordinate
+    private int _nextLoadPosition = 0; //World Space y-coordinate the camera has to pass to load next screen
+    private Camera _camera;
 
     private int _loadingRow = 0; //matrix row
     private int _screenRow = 0;
@@ -27,10 +27,12 @@ public class LevelGenerator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _level = new int[_visibleHeight * 3, _gridWidth]; //[rows, columns]
+        _level = new int[_visibleHeight * 5, _gridWidth]; //[rows, columns]
+        _nextLoadPosition = -_visibleHeight / 2;
+        _camera = Camera.main;
 
-        
-
+        GenerateNextScreen();
+        GenerateNextScreen();
         GenerateNextScreen();
     }
 
@@ -102,27 +104,34 @@ public class LevelGenerator : MonoBehaviour
         return true;
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void FixedUpdate()
     {
-        if (/*collision.gameObject.GetComponent<Player2D>()*/ collision.gameObject.tag == "Player")
+        if (_camera.transform.position.y < _nextLoadPosition)
         {
             GenerateNextScreen();
-            GetComponent<BoxCollider2D>().transform.Translate(Vector3.down * _visibleHeight);
+            MoveDown();
+        }
+    }
 
-            RaycastHit2D[] hits = Physics2D.BoxCastAll((Vector2)transform.position + new Vector2(0, _visibleHeight * 2), new Vector2(_gridWidth, _visibleHeight), 0, Vector2.up, 0.5f);
+    private void MoveDown()
+    {      
+        transform.Translate(Vector3.down * _visibleHeight);
+        _nextLoadPosition -= _visibleHeight;
 
-            foreach (RaycastHit2D hit in hits)
+        RaycastHit2D[] hits = Physics2D.BoxCastAll((Vector2)transform.position + new Vector2(0, _visibleHeight * 2), new Vector2(_gridWidth, _visibleHeight), 0, Vector2.up, 0.5f);
+
+        foreach (RaycastHit2D hit in hits)
+        {
+            Destroy(hit.collider.gameObject);
+        }
+
+        //empty out matrix under
+        for (int i = 0; i < _visibleHeight; i++)
+        {
+            int row = (_loadingRow + _visibleHeight / 2 + i) % (_visibleHeight * 3);
+            for (int j = 0; j < _gridWidth; j++)
             {
-                Destroy(hit.collider.gameObject);
-            }
-
-            for (int i = 0; i < _visibleHeight; i++)
-            {
-                int row = (_loadingRow + _visibleHeight / 2 + i) % (_visibleHeight * 3);
-                for (int j = 0; j < _gridWidth; j++)
-                {
-                    _level[row , j] = 0;
-                }
+                _level[row, j] = 0;
             }
         }
     }
