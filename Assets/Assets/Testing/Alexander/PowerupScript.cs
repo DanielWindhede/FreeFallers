@@ -5,52 +5,21 @@ using UnityEngine;
 public class PowerupScript : MonoBehaviour
 {
     //flytta till global state sen
-    [SerializeField]
-    public enum PowerupType
-    {
-        None,
-        PowerupType1,
-        PowerupType2
-    };
 
-    public PowerupType powerupType;
+    public GlobalState.PowerupType _powerupType;
 
-
-    //använd global state sen
-    [SerializeField] GameObject _player;
     LayerMask _playerLayers;
 
     private void Awake()
     {
-        //_player = GlobalState.state.Player.gameObject;
-        _playerLayers |= 1 << _player.layer;
-    }
-
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
-
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (_playerLayers == (_playerLayers | 1 << other.gameObject.layer))
-        {
-            other.GetComponent<PlayerPowerupScript>().currentPowerup = powerupType;
-            Destroy(this.gameObject);
-        }
+        _playerLayers |= 1 << GlobalState.state.Players[0].layer;
     }
     
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (_playerLayers == (_playerLayers | 1 << other.gameObject.layer))
         {
-            other.GetComponent<PlayerPowerupScript>().currentPowerup = powerupType;
+            other.GetComponent<PlayerPowerupScript>().currentPowerup = _powerupType;
             Destroy(this.gameObject);
         }
     }

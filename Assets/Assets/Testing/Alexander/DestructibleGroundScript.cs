@@ -8,6 +8,8 @@ public class DestructibleGroundScript : MonoBehaviour
 
     [SerializeField] float _velocityToBreak;
 
+    [SerializeField] GameObject _brokenBoardPrefab;
+
     
     [SerializeField] [Range(0, 1)] float _slowDownAmount;
 
@@ -17,37 +19,25 @@ public class DestructibleGroundScript : MonoBehaviour
 
     private void Awake()
     {
-        //_player = GlobalState.state.Player.gameObject;
         _playerLayers |= 1 << _player.layer;
-    }
-
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (_playerLayers == (_playerLayers | 1 << collision.gameObject.layer))
         {
-            //print(collision.rigidbody.velocity.y);
-            print("impact velocity: " + Mathf.Abs(collision.relativeVelocity.y));
-            
-            if (Mathf.Abs(collision.relativeVelocity.y) > _velocityToBreak)
+            Player2D player2D = collision.gameObject.GetComponent<Player2D>();
+
+            if (Mathf.Abs(player2D.previousVelocity.y) > _velocityToBreak)
             {
-                //starta en coroutine som deletar bitarna efter x sec
-                collision.gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(collision.gameObject.GetComponent<Rigidbody2D>().velocity.x, collision.relativeVelocity.y * _slowDownAmount);
-                
+                player2D.OverrideVelocity(new Vector3(player2D.previousVelocity.x, player2D.previousVelocity.y * _slowDownAmount, 0f));
+
+                Instantiate(_brokenBoardPrefab, transform.position, this.transform.rotation);
+
+                GlobalState.state.AudioManager.FloorBreak(transform.position);
                 Destroy(this.gameObject);
             }
+
         }
     }
-
-
-
 }
