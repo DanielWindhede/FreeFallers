@@ -16,6 +16,7 @@ public class Player2D : MonoBehaviour
 
     // Info
     private float _gravity;
+    [NonSerialized] public float _gravityMultiplier;
     private float _maxJumpVelocity;
     private float _minJumpVelocity;
     private Vector3 _velocity;
@@ -45,6 +46,7 @@ public class Player2D : MonoBehaviour
         _playerInput = new PlayerInput();
         _spriteRenderer = _animator.GetComponent<SpriteRenderer>();
 
+        _gravityMultiplier = 1f;
         _gravity = -(2 * _maxJumpHeight) / Mathf.Pow(_timeToJumpApex, 2);
         _maxJumpVelocity = Mathf.Abs(_gravity) * _timeToJumpApex;
         _minJumpVelocity = Mathf.Sqrt(Mathf.Abs(_gravity) * _minJumpHeight);
@@ -58,6 +60,8 @@ public class Player2D : MonoBehaviour
 
         DontDestroyOnLoad(this.gameObject);
     }
+
+
 
     void MouseExplosion()
     {
@@ -131,8 +135,16 @@ public class Player2D : MonoBehaviour
 
         float targetVelocityX = _inputDirection.x * _moveSpeed;
         _velocity.x = Mathf.SmoothDamp(_velocity.x, targetVelocityX, ref _velocityXSmoothing, (_controller.collisions.below) ? _accelerationTimeGrounded : _accelerationTimeAirborne);
-        _velocity.y += _gravity * Time.fixedDeltaTime;
-
+        
+        if (_velocity.y < 0)
+        {
+            _velocity.y += _gravity * Time.fixedDeltaTime * _gravityMultiplier;
+        }
+        else
+        {
+            _velocity.y += _gravity * Time.fixedDeltaTime;
+        }
+        
         _controller.Move(_velocity * Time.fixedDeltaTime);
 
         if (_controller.collisions.above || _controller.collisions.below)

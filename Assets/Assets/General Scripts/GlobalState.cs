@@ -22,7 +22,8 @@ public class GlobalState : MonoBehaviour
         None,
         GroundSlam,
         ZumBok,
-        Smirnoof
+        Smirnoof,
+        Burger
     };
 
     //public PowerupType powerupType;
