@@ -59,14 +59,14 @@ public class Audiomanager : MonoBehaviour
         RuntimeManager.PlayOneShot(powerUpWine, position);
     }
 
-    public void PowerUpBook(Vector3 position)
+    public void PowerUpBook()
     {
         powerUpBookEvent = RuntimeManager.CreateInstance(powerUpBook);
         powerUpBookEvent.start();
     }
-    public void PowerUpBookCancel(Vector3 position)
+    public void PowerUpBookCancel()
     {
-        powerUpBookEvent.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        powerUpBookEvent.setParameterByName("DoneBook", 1f);
     }
 
     public void PowerUpSlam(Vector3 position)
