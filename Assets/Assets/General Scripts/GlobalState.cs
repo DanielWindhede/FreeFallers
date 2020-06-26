@@ -74,4 +74,33 @@ public class GlobalState : MonoBehaviour
             _state = this;
         }
     }
+    private bool _hitstopRunning;
+    public void Hitstop(float duration)
+    {
+        if (!_hitstopRunning && duration > 0)
+            StartCoroutine(HitstopCoroutine(duration));
+    }
+
+    private IEnumerator HitstopCoroutine(float duration)
+    {
+        _hitstopRunning = true;
+        yield return new WaitForEndOfFrame();
+
+        Time.timeScale = 0f;
+
+        yield return new WaitForSecondsRealtime(duration);
+
+        Time.timeScale = 1f;
+        _hitstopRunning = false;
+
+        yield return 0;
+    }
+
+    private void OnDestroy()
+    {
+        if (this == _state)
+        {
+            _state = null;
+        }
+    }
 }

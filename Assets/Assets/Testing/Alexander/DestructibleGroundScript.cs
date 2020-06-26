@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DestructibleGroundScript : MonoBehaviour
 {
-
+    private float _hitstopDuration = 0.05f;
 
     [SerializeField] float _velocityToBreak;
 
@@ -35,6 +35,7 @@ public class DestructibleGroundScript : MonoBehaviour
                 Instantiate(_brokenBoardPrefab, transform.position, this.transform.rotation);
 
                 GlobalState.state.AudioManager.FloorBreak(transform.position);
+                GlobalState.state.Hitstop(_hitstopDuration);
                 Destroy(this.gameObject);
             }
 
