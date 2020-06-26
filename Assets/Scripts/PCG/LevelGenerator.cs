@@ -9,6 +9,8 @@ public class LevelGenerator : MonoBehaviour
     [SerializeField] private int _visibleHeight;
     [SerializeField] [Range(0f,1f)] private float _spawnRate = 0.2f;
     [SerializeField] private List<Obstacle> _obstacles;
+    [SerializeField] private List<GameObject> _powerUps;
+    [SerializeField] [Range(0, 0.5f)] private float _powerUpSpawnRate;
 
     private int[,] _level;
 
@@ -42,17 +44,31 @@ public class LevelGenerator : MonoBehaviour
         {
             for (int column = 0; column < _level.GetLength(1); column++)
             {
-                if (_level[(-_topPosition + row) % (_visibleHeight * 3), column] != 1 && PlaceObjectNow()) //if empty and should spawn
+                if (_level[(-_topPosition + row) % (_visibleHeight * 3), column] != 1 && SpawRateTest(_spawnRate)) //if empty and should spawn
                 {
                     _loadingRow = (-_topPosition + row) % (_visibleHeight * 3);
                     _screenRow = row;
                     _loadingColumn = column;
 
-                    PlaceObstacle();
+                    if (SpawRateTest(_powerUpSpawnRate))
+                    {
+                        PlacePowerUp();
+                    }
+                    else
+                    {
+                        PlaceObstacle();
+                    }
+
+
                 }
             }
         }
         _topPosition -= _visibleHeight;
+    }
+
+    private void PlacePowerUp()
+    {
+        Instantiate(_powerUps[Random.Range(0, _powerUps.Count)], new Vector3(_loadingColumn + 0.5f - _gridWidth / 2, _topPosition - (_screenRow + 0.5f), 0), new Quaternion());
     }
 
     private void PlaceObstacle()
@@ -80,9 +96,9 @@ public class LevelGenerator : MonoBehaviour
         }
     }
 
-    private bool PlaceObjectNow()
+    private bool SpawRateTest(float spawnRate)
     {
-        return Random.value < _spawnRate;
+        return Random.value < spawnRate;
     }
 
     private bool CanBePlaced(Obstacle obstacle)
