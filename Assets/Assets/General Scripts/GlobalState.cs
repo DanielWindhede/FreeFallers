@@ -15,8 +15,6 @@ public class GlobalState : MonoBehaviour
 
     [SerializeField] private Audiomanager _audiomanager;
 
-    //[SerializeField] private AudioManager _audioManager;
-
     public enum PowerupType
     {
         None,

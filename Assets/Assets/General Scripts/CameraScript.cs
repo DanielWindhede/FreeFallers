@@ -7,7 +7,16 @@ public class CameraScript : MonoBehaviour
 
     [SerializeField] [Range(0.01f, 1)] float _folowAmount;
 
+    [SerializeField] float _cloudSpawnDistanceBase;
+    [SerializeField] float _cloudSpawnDistanceRandInc;
+    public float _nextCloudSpawnPosY;
+    public float _lastCloudSpawnPosY;
+
+
+
+
     Camera _camera;
+    [SerializeField] BackgroundSpawnerScript _cloudSpawner;
 
     List<GameObject> _players = new List<GameObject>();
 
@@ -17,7 +26,12 @@ public class CameraScript : MonoBehaviour
 
     private void Awake()
     {
-        _camera = GetComponent<Camera>();
+        _camera = GlobalState.state.Camera;
+        _lastCloudSpawnPosY = transform.position.y;
+        _nextCloudSpawnPosY = _lastCloudSpawnPosY - _cloudSpawnDistanceBase - Random.Range(0f, _cloudSpawnDistanceRandInc);
+        print(_lastCloudSpawnPosY);
+        print(_nextCloudSpawnPosY);
+
     }
 
     private void Start()
@@ -40,6 +54,13 @@ public class CameraScript : MonoBehaviour
         if (_playerToFolow.transform.position.y + _camera.orthographicSize * _folowAmount < transform.position.y)
         {
             transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, _playerToFolow.transform.position.y + _camera.orthographicSize * _folowAmount, -10f), 0.5f);
+            _lastCloudSpawnPosY = transform.position.y;
+            if (_lastCloudSpawnPosY < _nextCloudSpawnPosY)
+            {
+                print("floof");
+                _cloudSpawner.spawnRandomBackgroundObjectAtRandomPosition();
+                _nextCloudSpawnPosY = _lastCloudSpawnPosY - _cloudSpawnDistanceBase - Random.Range(0f, _cloudSpawnDistanceRandInc);
+            }
         }
 
         //transform.position = Vector3.MoveTowards(transform.position, new Vector3(_playerToFolow.transform.position.x, _playerToFolow.transform.position.y, -10f), 0.5f);
